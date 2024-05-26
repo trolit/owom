@@ -1,94 +1,26 @@
 import { IOwom, useOwom } from "@owom";
 
-import { User } from "./models/User";
-import { IUserDto } from "./dtos/IUserDto";
-import { SafeUserMapper } from "./mappers/SafeUserMapper";
-import { UnsafeUserMapper } from "./mappers/UnsafeUserMapper";
+import { USER1, USER2 } from "./data";
+import { UserMapper } from "./mappers/UserMapper";
 
-describe("Simple map (without DI)", () => {
+describe("simple map (without DI)", () => {
   let owom: IOwom;
-  let user1: { beforeMap: User; afterMap: IUserDto };
-  let user2: { beforeMap: User; afterMap: IUserDto };
 
   beforeAll(() => {
     owom = useOwom({});
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date(2024, 3, 1));
-
-    user1 = {
-      beforeMap: {
-        firstName: "Abe",
-        lastName: "Kasky",
-        password: "1234",
-        createdAt: new Date(),
-        deletedAt: null,
-      },
-      afterMap: {
-        fullName: `Abe Kasky`,
-        memberSince: new Date().toISOString(),
-        isActive: true,
-      },
-    };
-
-    user2 = {
-      beforeMap: {
-        firstName: "Kink",
-        lastName: "Ab",
-        password: "5678",
-        createdAt: new Date(),
-        deletedAt: new Date(),
-      },
-      afterMap: {
-        fullName: `Kink Ab`,
-        memberSince: new Date().toISOString(),
-        isActive: false,
-      },
-    };
   });
 
-  it("should throw error when mapping object with unsecured 'createdAt' property", () => {
-    const invoke = () => {
-      owom.map({}).to(UnsafeUserMapper);
-    };
+  it("should return expected object", () => {
+    const result = owom.map(USER1.beforeMap).to(UserMapper);
 
-    expect(invoke).toThrow(TypeError);
+    expect(result).toMatchObject(USER1.afterMap);
   });
 
-  it("should throw error when mapping collection with unsecured 'createdAt' property", () => {
-    const invoke = () => {
-      owom.map([user1.beforeMap, {}]).to(UnsafeUserMapper);
-    };
+  it("should return expected collection", () => {
+    const result = owom.map([USER1.beforeMap, USER2.beforeMap]).to(UserMapper);
 
-    expect(invoke).toThrow(TypeError);
-  });
-
-  it("should NOT throw error when mapping object is secured", () => {
-    const invoke = () => {
-      owom.map({}).to(SafeUserMapper);
-    };
-
-    expect(invoke).not.toThrow(TypeError);
-  });
-
-  it("should NOT throw error when mapping collection is secured", () => {
-    const invoke = () => {
-      owom.map([user1.beforeMap, {}]).to(SafeUserMapper);
-    };
-
-    expect(invoke).not.toThrow(TypeError);
-  });
-
-  it("should return valid mapped object", () => {
-    const result = owom.map(user1.beforeMap).to(UnsafeUserMapper);
-
-    expect(result).toMatchObject(user1.afterMap);
-  });
-
-  it("should return valid collection of mapped objects", () => {
-    const result = owom
-      .map([user1.beforeMap, user2.beforeMap])
-      .to(UnsafeUserMapper);
-
-    expect(result).toMatchObject([user1.afterMap, user2.afterMap]);
+    expect(result).toHaveLength(2);
+    expect(result[0]).toMatchObject(USER1.afterMap);
+    expect(result[1]).toMatchObject(USER2.afterMap);
   });
 });

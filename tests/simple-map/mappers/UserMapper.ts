@@ -3,7 +3,7 @@ import { OwomMapper } from "@owom";
 import { User } from "../models/User";
 import { IUserDto } from "../dtos/IUserDto";
 
-export class UnsafeUserMapper extends OwomMapper<User> implements IUserDto {
+export class UserMapper extends OwomMapper<User> implements IUserDto {
   fullName: string;
   isActive: boolean;
   memberSince: string;
@@ -15,7 +15,6 @@ export class UnsafeUserMapper extends OwomMapper<User> implements IUserDto {
 
     this.fullName = `${firstName} ${lastName}`;
 
-    // unsafe
     this.memberSince = createdAt.toISOString();
 
     this.isActive = !deletedAt;
