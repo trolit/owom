@@ -1,7 +1,7 @@
 import { OwomMapper } from "@owom";
 
-import { User } from "./User";
-import { IUserDto } from "./IUserDto";
+import { User } from "../models/User";
+import { IUserDto } from "../dtos/IUserDto";
 
 export class UnsafeUserMapper extends OwomMapper<User> implements IUserDto {
   fullName: string;

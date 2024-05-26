@@ -1,11 +1,11 @@
 import { IOwom, useOwom } from "@owom";
 
-import { User } from "./User";
-import { IUserDto } from "./IUserDto";
-import { SafeUserMapper } from "./SafeUserMapper";
-import { UnsafeUserMapper } from "./UnsafeUserMapper";
+import { User } from "./models/User";
+import { IUserDto } from "./dtos/IUserDto";
+import { SafeUserMapper } from "./mappers/SafeUserMapper";
+import { UnsafeUserMapper } from "./mappers/UnsafeUserMapper";
 
-describe("Simple map tests (without DI)", () => {
+describe("Simple map (without DI)", () => {
   let owom: IOwom;
   let user1: { beforeMap: User; afterMap: IUserDto };
   let user2: { beforeMap: User; afterMap: IUserDto };
