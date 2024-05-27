@@ -12,7 +12,7 @@ enum Di {
   CommentMapper = "CommentMapper",
 }
 
-describe("Nested map (with DI)", () => {
+describe("nested map (with DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {

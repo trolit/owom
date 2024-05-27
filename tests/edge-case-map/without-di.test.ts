@@ -1,55 +1,11 @@
 import { IOwom, OwomMapper, useOwom } from "@owom";
 
-class Source {
-  name: string;
-  status?: boolean;
-  createdAt: Date;
-}
-
-interface ITarget {
-  name: string;
-  status: boolean;
-  publishedAt: string;
-}
-
-class Mapper extends OwomMapper<Source> implements ITarget {
-  name: string;
-  status: boolean;
-  publishedAt: string;
-
-  constructor(data: Source) {
-    super(data, ["name"]);
-
-    const { status, createdAt } = data;
-
-    this.status = status;
-
-    this.publishedAt = createdAt.toISOString();
-  }
-}
-
-class SafeMapper extends OwomMapper<Source> implements ITarget {
-  name: string;
-  status: boolean;
-  publishedAt: string;
-
-  constructor(data: Source) {
-    super(data, ["name"]);
-
-    const { status, createdAt } = data;
-
-    this.status = status;
-
-    // in real scenario though, we wouldn't add such check as createdAt is neither optional nor nullable
-    if (createdAt) {
-      this.publishedAt = createdAt.toISOString();
-    }
-  }
-}
+import { Mapper } from "./Mapper";
+import { SafeMapper } from "./SafeMapper";
 
 // ------------------------------------------------------
 
-describe("map", () => {
+describe("edge-case map (without DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {

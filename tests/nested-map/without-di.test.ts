@@ -3,7 +3,7 @@ import { IOwom, useOwom } from "@owom";
 import { POST_1, POST_2 } from "./data";
 import { PostMapperWithoutDi } from "./mappers/PostMapper";
 
-describe("Nested map (without DI)", () => {
+describe("nested map (without DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {
