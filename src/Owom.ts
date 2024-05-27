@@ -41,7 +41,7 @@ export class Owom implements IOwom {
     return Array.isArray(entity)
       ? {
           to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
-            entity.map((entity) => this._performMap(entity, Mapper)),
+            entity.map(entity => this._performMap(entity, Mapper)),
         }
       : {
           to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
@@ -53,11 +53,11 @@ export class Owom implements IOwom {
     entity: T | T[]
   ): { to: MapFuncWithDi<Y> } | { to: MapManyFuncWithDi<Y> } {
     return {
-      to: (token) => {
+      to: token => {
         const Mapper = this._diResolver(token);
 
         return Array.isArray(entity)
-          ? entity.map((entity) => this._performMap(entity, Mapper))
+          ? entity.map(entity => this._performMap(entity, Mapper))
           : this._performMap(entity, Mapper);
       },
     };

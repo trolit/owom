@@ -18,7 +18,7 @@ describe("simple map (with DI)", () => {
     container.bind(Di.UserMapper).toConstructor(UserMapper);
 
     owom = useOwom({
-      di: (token) => container.get(token),
+      di: token => container.get(token),
     });
   });
 

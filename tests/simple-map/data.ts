@@ -8,7 +8,7 @@ export const DATE = new Date(2024, 3, 1);
 const createUser: (isActive: boolean) => {
   beforeMap: User;
   afterMap: IUserDto;
-} = (isActive) => {
+} = isActive => {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
 
