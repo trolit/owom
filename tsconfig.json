@@ -8,7 +8,8 @@
     "paths": {
       "@owom": ["index.ts"]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "experimentalDecorators": true
   },
   "include": ["src/**/*", "tests/**/*"]
 }
