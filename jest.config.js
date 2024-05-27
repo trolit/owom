@@ -1,0 +1,7 @@
+module.exports = {
+  preset: "ts-jest",
+  verbose: true,
+  moduleNameMapper: {
+    "@owom": "<rootDir>/src/$1",
+  },
+};
