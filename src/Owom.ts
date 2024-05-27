@@ -1,7 +1,7 @@
 import { IOwom } from "./types/IOwom";
 import { OwomMapper } from "./OwomMapper";
-import { DiResolver, Options } from "./types/Options";
 import { Constructor } from "types/Constructor";
+import { DiResolver, Options } from "./types/Options";
 import {
   MapFuncWithDi,
   MapFuncWithoutDi,
