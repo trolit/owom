@@ -13,8 +13,6 @@ enum Di {
   SafeMapper = "SafeMapper",
 }
 
-// ------------------------------------------------------
-
 describe("edge-case map (with DI)", () => {
   let owom: IOwom;
 
