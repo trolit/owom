@@ -23,7 +23,7 @@ describe("edge-case map (with DI)", () => {
     container.bind(Di.SafeMapper).toConstructor(SafeMapper);
 
     owom = useOwom({
-      di: (token) => container.get(token),
+      di: token => container.get(token),
     });
   });
 
