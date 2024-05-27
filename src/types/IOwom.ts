@@ -15,13 +15,13 @@ export interface IOwom {
   };
 
   map<T, Y>(
-    entity: T[]
+    entity: T[],
   ): {
     to: MapManyFuncWithDi<Y>;
   };
 
   map<T, Y>(
-    entity: T
+    entity: T,
   ): {
     to: MapFuncWithDi<Y>;
   };
