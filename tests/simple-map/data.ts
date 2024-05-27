@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 
-import { User } from "./models/User";
 import { IUserDto } from "./dtos/IUserDto";
+import { User } from "./models/User";
 
 export const DATE = new Date(2024, 3, 1);
 

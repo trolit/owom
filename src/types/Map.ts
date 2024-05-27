@@ -1,5 +1,5 @@
-import { OwomMapper } from "@owom";
 import { Constructor } from "./Constructor";
+import { OwomMapper } from "@owom";
 
 export type MapFuncWithoutDi<T> = <Y extends OwomMapper<T>>(
   Mapper: Constructor<T, Y>,

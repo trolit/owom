@@ -1,7 +1,7 @@
 import { IOwom, useOwom } from "@owom";
 
-import { Mapper } from "./Mapper";
 import { SafeMapper } from "./SafeMapper";
+import { Mapper } from "./Mapper";
 
 describe("edge-case map (without DI)", () => {
   let owom: IOwom;

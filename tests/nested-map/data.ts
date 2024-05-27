@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 
-import { User } from "./models/User";
-import { Comment } from "./models/Comment";
 import { ICommentDto } from "./dtos/ICommentDto";
+import { Comment } from "./models/Comment";
+import { User } from "./models/User";
 
 const firstName = "Ab";
 const lastName = "Kevinsky";

@@ -1,10 +1,10 @@
-import { Container } from "inversify";
 import { IOwom, useOwom } from "@owom";
+import { Container } from "inversify";
 
-import { User } from "./models/User";
-import { USER1, USER2 } from "./data";
-import { IUserDto } from "./dtos/IUserDto";
 import { UserMapper } from "./mappers/UserMapper";
+import { IUserDto } from "./dtos/IUserDto";
+import { USER1, USER2 } from "./data";
+import { User } from "./models/User";
 
 enum Di {
   UserMapper = "UserMapper",
