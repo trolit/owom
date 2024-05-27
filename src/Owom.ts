@@ -1,6 +1,13 @@
 import { IOwom } from "./types/IOwom";
 import { OwomMapper } from "./OwomMapper";
 import { DiResolver, Options } from "./types/Options";
+import { Constructor } from "types/Constructor";
+import {
+  MapFuncWithDi,
+  MapFuncWithoutDi,
+  MapManyFuncWithDi,
+  MapManyFuncWithoutDi,
+} from "types/Map";
 
 export class Owom implements IOwom {
   private _diResolver?: DiResolver;
@@ -11,60 +18,52 @@ export class Owom implements IOwom {
     }
   }
 
-  map<T>(entity: T): {
-    to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y;
-  };
-  map<T>(entity: T[]): {
-    to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y[];
-  };
-  map<T, Y>(entity: T): { to: (token: string) => Y };
-  map<T, Y>(entity: T[]): { to: (token: string) => Y[] };
+  map<T>(entity: T): { to: MapFuncWithoutDi<T> };
+  map<T>(entity: T[]): { to: MapManyFuncWithoutDi<T> };
+  map<T, Y>(entity: T): { to: MapFuncWithDi<Y> };
+  map<T, Y>(entity: T[]): { to: MapManyFuncWithDi<Y> };
 
   map<T, Y = void>(
     entity: T | T[]
   ):
-    | {
-        to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y;
-      }
-    | { to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y[] }
-    | { to: (token: string) => Y }
-    | { to: (token: string) => Y[] } {
+    | { to: MapFuncWithoutDi<T> }
+    | { to: MapManyFuncWithoutDi<T> }
+    | { to: MapFuncWithDi<Y> }
+    | { to: MapManyFuncWithDi<Y> } {
     if (this._diResolver) {
-      return <{ to: (token: string) => Y } | { to: (token: string) => Y[] }>(
-        this._resolveWithDi(entity)
-      );
+      return this._resolveMapWithDi<T, Y>(entity);
     }
 
+    return this._resolveMapWithConcreteType(entity);
+  }
+
+  private _resolveMapWithConcreteType<T>(entity: T | T[]) {
     return Array.isArray(entity)
       ? {
-          to: <Y extends OwomMapper<T>>(
-            mapper: new (data: T, owom: IOwom) => Y
-          ) => {
-            return entity.map((entity) => new mapper(entity, this));
-          },
+          to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
+            entity.map((entity) => this._performMap(entity, Mapper)),
         }
       : {
-          to: <Y extends OwomMapper<T>>(
-            mapper: new (data: T, owom: IOwom) => Y
-          ) => {
-            return new mapper(entity, this);
-          },
+          to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
+            this._performMap(entity, Mapper),
         };
   }
 
-  private _resolveWithDi<T, Y>(
+  private _resolveMapWithDi<T, Y>(
     entity: T | T[]
-  ): { to: (token: string) => Y | Y[] } {
-    const toImplementation = (token: string): Y | Y[] => {
-      const Mapper: { new (data: T, owom: IOwom) } = <any>(
-        this._diResolver(token)
-      );
+  ): { to: MapFuncWithDi<Y> } | { to: MapManyFuncWithDi<Y> } {
+    return {
+      to: (token) => {
+        const Mapper = this._diResolver(token);
 
-      return Array.isArray(entity)
-        ? entity.map((entity) => new Mapper(entity, this))
-        : new Mapper(entity, this);
+        return Array.isArray(entity)
+          ? entity.map((entity) => this._performMap(entity, Mapper))
+          : this._performMap(entity, Mapper);
+      },
     };
+  }
 
-    return { to: (token: string) => toImplementation(token) };
+  private _performMap<T, Y>(entity: T, Mapper: Constructor<T, Y>) {
+    return new Mapper(entity, this);
   }
 }

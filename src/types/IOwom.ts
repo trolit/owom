@@ -1,23 +1,28 @@
-import { OwomMapper } from "../OwomMapper";
+import {
+  MapFuncWithDi,
+  MapFuncWithoutDi,
+  MapManyFuncWithDi,
+  MapManyFuncWithoutDi,
+} from "./Map";
 
 export interface IOwom {
   map<T>(entity: T[]): {
-    to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y[];
+    to: MapManyFuncWithoutDi<T>;
   };
 
   map<T>(entity: T): {
-    to: <Y extends OwomMapper<T>>(mapper: new (data: T) => Y) => Y;
+    to: MapFuncWithoutDi<T>;
   };
 
   map<T, Y>(
     entity: T[]
   ): {
-    to: (token: string) => Y[];
+    to: MapManyFuncWithDi<Y>;
   };
 
   map<T, Y>(
     entity: T
   ): {
-    to: (token: string) => Y;
+    to: MapFuncWithDi<Y>;
   };
 }
