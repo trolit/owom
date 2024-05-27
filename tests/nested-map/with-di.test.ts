@@ -21,7 +21,7 @@ describe("nested map (with DI)", () => {
     container.bind(Di.CommentMapper).toConstructor(CommentMapper);
 
     owom = useOwom({
-      di: (token) => container.get(token),
+      di: token => container.get(token),
     });
   });
 
