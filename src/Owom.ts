@@ -24,7 +24,7 @@ export class Owom implements IOwom {
   map<T, Y>(entity: T[]): { to: MapManyFuncWithDi<Y> };
 
   map<T, Y = void>(
-    entity: T | T[],
+    entity: T | T[]
   ):
     | { to: MapFuncWithoutDi<T> }
     | { to: MapManyFuncWithoutDi<T> }
@@ -50,7 +50,7 @@ export class Owom implements IOwom {
   }
 
   private _resolveMapWithDi<T, Y>(
-    entity: T | T[],
+    entity: T | T[]
   ): { to: MapFuncWithDi<Y> } | { to: MapManyFuncWithDi<Y> } {
     return {
       to: token => {
