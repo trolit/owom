@@ -1,8 +1,12 @@
+import "reflect-metadata";
+import { injectable } from "inversify";
+
 import { OwomMapper } from "@owom";
 
 import { Comment } from "../models/Comment";
 import { ICommentDto } from "../dtos/ICommentDto";
 
+@injectable()
 export class CommentMapper extends OwomMapper<Comment> implements ICommentDto {
   author: string;
   value: string;

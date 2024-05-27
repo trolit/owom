@@ -1,3 +1,6 @@
+import "reflect-metadata";
+import { injectable } from "inversify";
+
 import { IOwom, OwomMapper } from "@owom";
 
 import { Post } from "../models/Post";
@@ -28,6 +31,7 @@ export class PostMapperWithoutDi extends OwomMapper<Post> implements IPostDto {
   }
 }
 
+@injectable()
 export class PostMapperWithDi extends OwomMapper<Post> implements IPostDto {
   author: string;
   title: string;
