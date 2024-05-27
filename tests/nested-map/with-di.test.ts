@@ -1,11 +1,11 @@
-import { Container } from "inversify";
 import { IOwom, useOwom } from "@owom";
+import { Container } from "inversify";
 
-import { Post } from "./models/Post";
-import { POST_1, POST_2 } from "./data";
-import { IPostDto } from "./dtos/IPostDto";
 import { CommentMapper } from "./mappers/CommentMapper";
 import { PostMapperWithDi } from "./mappers/PostMapper";
+import { IPostDto } from "./dtos/IPostDto";
+import { POST_1, POST_2 } from "./data";
+import { Post } from "./models/Post";
 
 enum Di {
   PostMapper = "PostMapper",

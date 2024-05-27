@@ -1,12 +1,11 @@
-import "reflect-metadata";
 import { Container } from "inversify";
 
 import { IOwom, useOwom } from "@owom";
 
+import { SafeMapper } from "./SafeMapper";
+import { ITarget } from "./ITarget";
 import { Source } from "./Source";
 import { Mapper } from "./Mapper";
-import { ITarget } from "./ITarget";
-import { SafeMapper } from "./SafeMapper";
 
 enum Di {
   Mapper = "Mapper",

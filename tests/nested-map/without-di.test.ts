@@ -1,7 +1,7 @@
 import { IOwom, useOwom } from "@owom";
 
-import { POST_1, POST_2 } from "./data";
 import { PostMapperWithoutDi } from "./mappers/PostMapper";
+import { POST_1, POST_2 } from "./data";
 
 describe("nested map (without DI)", () => {
   let owom: IOwom;

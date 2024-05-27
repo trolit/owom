@@ -1,13 +1,13 @@
-import { IOwom } from "./types/IOwom";
-import { OwomMapper } from "./OwomMapper";
-import { DiResolver, Options } from "./types/Options";
-import { Constructor } from "types/Constructor";
 import {
   MapFuncWithDi,
   MapFuncWithoutDi,
   MapManyFuncWithDi,
   MapManyFuncWithoutDi,
 } from "types/Map";
+import { DiResolver, Options } from "./types/Options";
+import { Constructor } from "types/Constructor";
+import { OwomMapper } from "./OwomMapper";
+import { IOwom } from "./types/IOwom";
 
 export class Owom implements IOwom {
   private _diResolver?: DiResolver;

@@ -1,10 +1,10 @@
-import "reflect-metadata";
 import { injectable } from "inversify";
+import "reflect-metadata";
 
 import { OwomMapper } from "@owom";
 
-import { Source } from "./Source";
 import { ITarget } from "./ITarget";
+import { Source } from "./Source";
 
 @injectable()
 export class SafeMapper extends OwomMapper<Source> implements ITarget {

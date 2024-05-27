@@ -8,8 +8,8 @@
     "paths": {
       "@owom": ["index.ts"]
     },
-    "useDefineForClassFields": false,
-    "experimentalDecorators": true
+    "useDefineForClassFields": false, // @NOTE when 'true', inherited keys need to be assigned by invoking method in constructor
+    "experimentalDecorators": true // @NOTE required for resolving mappers through DI
   },
   "include": ["src/**/*", "tests/**/*"]
 }

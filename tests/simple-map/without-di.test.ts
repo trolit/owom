@@ -1,7 +1,7 @@
 import { IOwom, useOwom } from "@owom";
 
-import { USER1, USER2 } from "./data";
 import { UserMapper } from "./mappers/UserMapper";
+import { USER1, USER2 } from "./data";
 
 describe("simple map (without DI)", () => {
   let owom: IOwom;

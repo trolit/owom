@@ -1,31 +1,36 @@
-const DATA_SYMBOL = Symbol("DATA");
-const INITIAL_KEYS_SYMBOL = Symbol("INITIAL_KEYS");
+const DATA_KEY = "DATA";
+const INHERITED_KEYS_KEY = "INHERITED_KEYS";
 
 export class OwomMapper<T> {
-  constructor(data: T, initialKeys?: (keyof T)[]) {
-    (this as any)[DATA_SYMBOL] = data;
-    (this as any)[INITIAL_KEYS_SYMBOL] = initialKeys;
+  constructor(data: T, inheritedKeys?: (keyof T)[]) {
+    this[DATA_KEY] = data;
+    this[INHERITED_KEYS_KEY] = inheritedKeys;
 
-    this.assignInitialKeys();
+    this.useInheritedKeys();
   }
 
-  // @NOTE solution to native JS property initialistation (useDefineForClassFields = true)
-  protected assignInitialKeys() {
-    this._mapKeys((this as any)[INITIAL_KEYS_SYMBOL]);
+  // @NOTE needs to be called manually in mapper when useDefineForClassFields is true
+  protected useInheritedKeys() {
+    this._map();
+
+    this._removeTemporaryProperties();
   }
 
-  protected overwriteInitialKeys(inheritedKeys?: (keyof T)[]) {
-    if (inheritedKeys) {
-      this._mapKeys(inheritedKeys);
+  private _removeTemporaryProperties() {
+    delete this[DATA_KEY];
+    delete this[INHERITED_KEYS_KEY];
+  }
+
+  private _map() {
+    if (!this[INHERITED_KEYS_KEY]) {
+      return;
     }
-  }
 
-  private _mapKeys(keys: (keyof T)[]) {
-    keys.map((key) => {
-      const value = (this as any)[DATA_SYMBOL][key];
+    this[INHERITED_KEYS_KEY].map((key: keyof T) => {
+      const value = this[DATA_KEY][key];
 
       // @TODO add option to assign even if undefined
-      if (typeof value !== undefined) {
+      if (typeof value !== "undefined") {
         (this as any)[key] = value;
       }
     });
