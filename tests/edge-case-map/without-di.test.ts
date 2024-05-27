@@ -1,4 +1,4 @@
-import { IOwom, OwomMapper, useOwom } from "@owom";
+import { IOwom, useOwom } from "@owom";
 
 import { Mapper } from "./Mapper";
 import { SafeMapper } from "./SafeMapper";
