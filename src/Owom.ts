@@ -12,11 +12,18 @@ import { IOwom } from "./types/IOwom";
 export class Owom implements IOwom {
   private _diResolver?: DiResolver;
 
-  constructor({ di }: Options) {
+  constructor(options?: Options) {
+    if (!options) {
+      return;
+    }
+
+    const { di } = options;
+
     if (di) {
       this._diResolver = di;
     }
   }
+
   map<T>(entity: T): { to: MapFuncWithoutDi<T> };
   map<T>(entity: T[]): { to: MapManyFuncWithoutDi<T> };
   map<T, Y>(entity: T): { to: MapFuncWithDi<Y> };

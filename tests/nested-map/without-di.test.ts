@@ -7,7 +7,7 @@ describe("nested map (without DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {
-    owom = useOwom({});
+    owom = useOwom();
   });
 
   it("should return valid mapped object", () => {

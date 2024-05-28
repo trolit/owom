@@ -7,7 +7,7 @@ describe("simple map (without DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {
-    owom = useOwom({});
+    owom = useOwom();
   });
 
   it("should return expected object", () => {

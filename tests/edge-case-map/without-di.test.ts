@@ -7,7 +7,7 @@ describe("edge-case map (without DI)", () => {
   let owom: IOwom;
 
   beforeAll(() => {
-    owom = useOwom({});
+    owom = useOwom();
   });
 
   it("should throw error when object is null", () => {
