@@ -25,7 +25,7 @@ export class PostMapperWithoutDi extends OwomMapper<Post> implements IPostDto {
       this.author = `${user.firstName} ${user.lastName}`;
     }
 
-    this.comments = owom.map(comments).to(CommentMapper);
+    this.comments = owom.map<Comment, ICommentDto>(comments).to(CommentMapper);
 
     this.publishedAt = createdAt.toISOString();
   }

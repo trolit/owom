@@ -1,68 +1,62 @@
-import {
-  MapFuncWithDi,
-  MapFuncWithoutDi,
-  MapManyFuncWithDi,
-  MapManyFuncWithoutDi,
-} from "types/Map";
-import { DiResolver, Options } from "./types/Options";
+import { DiResolver, Options } from "types/Options";
+import { MapManyFunc, MapOneFunc } from "types/Map";
 import { Constructor } from "types/Constructor";
-import { OwomMapper } from "./OwomMapper";
-import { IOwom } from "./types/IOwom";
+import { IOwom } from "types/IOwom";
 
 export class Owom implements IOwom {
   private _diResolver?: DiResolver;
 
-  constructor({ di }: Options) {
+  constructor(options?: Options) {
+    if (!options) {
+      return;
+    }
+
+    const { di } = options;
+
     if (di) {
       this._diResolver = di;
     }
   }
-  map<T>(entity: T): { to: MapFuncWithoutDi<T> };
-  map<T>(entity: T[]): { to: MapManyFuncWithoutDi<T> };
-  map<T, Y>(entity: T): { to: MapFuncWithDi<Y> };
-  map<T, Y>(entity: T[]): { to: MapManyFuncWithDi<Y> };
 
-  map<T, Y = void>(
+  map<T, Z>(entity: T): { to: MapOneFunc<T, Z> };
+  map<T, Z>(entity: T[]): { to: MapManyFunc<T, Z> };
+  map<T, Z>(
     entity: T | T[],
-  ):
-    | { to: MapFuncWithoutDi<T> }
-    | { to: MapManyFuncWithoutDi<T> }
-    | { to: MapFuncWithDi<Y> }
-    | { to: MapManyFuncWithDi<Y> } {
-    if (this._diResolver) {
-      return this._resolveMapWithDi<T, Y>(entity);
-    }
-
-    return this._resolveMapWithConcreteType(entity);
-  }
-
-  private _resolveMapWithConcreteType<T>(entity: T | T[]) {
-    return Array.isArray(entity)
-      ? {
-          to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
-            entity.map(entity => this._performMap(entity, Mapper)),
-        }
-      : {
-          to: <Y extends OwomMapper<T>>(Mapper: Constructor<T, Y>) =>
-            this._performMap(entity, Mapper),
-        };
-  }
-
-  private _resolveMapWithDi<T, Y>(
-    entity: T | T[],
-  ): { to: MapFuncWithDi<Y> } | { to: MapManyFuncWithDi<Y> } {
+  ): { to: MapOneFunc<T, Z> } | { to: MapManyFunc<T, Z> } {
     return {
-      to: token => {
-        const Mapper = this._diResolver(token);
+      to: Mapper => {
+        if (typeof Mapper === "string") {
+          return this._resolveWithDi<T>(entity, Mapper);
+        }
 
-        return Array.isArray(entity)
-          ? entity.map(entity => this._performMap(entity, Mapper))
-          : this._performMap(entity, Mapper);
+        return this._resolveWithConcreteType<T, Z>(entity, Mapper);
       },
     };
   }
 
-  private _performMap<T, Y>(entity: T, Mapper: Constructor<T, Y>) {
-    return new Mapper(entity, this);
+  private _resolveWithConcreteType<T, Z>(
+    entity: T | T[],
+    Mapper: Constructor<T, Z>,
+  ) {
+    return Array.isArray(entity)
+      ? entity.map(entity => this._performMap(entity, Mapper))
+      : this._performMap(entity, Mapper);
+  }
+
+  private _resolveWithDi<T>(entity: T | T[], token: string) {
+    const Mapper = this._diResolver(token);
+
+    return Array.isArray(entity)
+      ? entity.map(entity => this._performMap(entity, Mapper))
+      : this._performMap(entity, Mapper);
+  }
+
+  private _performMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
+    const mapper = new Mapper(entity, this);
+
+    // @NOTE here you can cover extra options, referring to Mapper instance
+
+    // @NOTE free to cast as outcome of Mapper instantiation is supposed to match "Z"
+    return <Z>mapper;
   }
 }
