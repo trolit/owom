@@ -13,7 +13,7 @@ export class UserMapper extends OwomMapper<User> implements IUserDto {
   memberSince: string;
 
   constructor(data: User) {
-    super(data, []);
+    super(data);
 
     const { firstName, lastName, deletedAt, createdAt } = data;
 
