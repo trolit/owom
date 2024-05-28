@@ -1,28 +1,7 @@
-import {
-  MapFuncWithDi,
-  MapFuncWithoutDi,
-  MapManyFuncWithDi,
-  MapManyFuncWithoutDi,
-} from "./Map";
+import { MapManyFunc, MapOneFunc } from "./Map";
 
 export interface IOwom {
-  map<T>(entity: T[]): {
-    to: MapManyFuncWithoutDi<T>;
-  };
+  map<T, Z>(entity: T): { to: MapOneFunc<T, Z> };
 
-  map<T>(entity: T): {
-    to: MapFuncWithoutDi<T>;
-  };
-
-  map<T, Y>(
-    entity: T[],
-  ): {
-    to: MapManyFuncWithDi<Y>;
-  };
-
-  map<T, Y>(
-    entity: T,
-  ): {
-    to: MapFuncWithDi<Y>;
-  };
+  map<T, Z>(entity: T[]): { to: MapManyFunc<T, Z> };
 }
