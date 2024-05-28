@@ -1,7 +1,9 @@
 import { IOwom, useOwom } from "@owom";
 
 import { SafeMapper } from "./SafeMapper";
+import { ITarget } from "./ITarget";
 import { Mapper } from "./Mapper";
+import { Source } from "./Source";
 
 describe("edge-case map (without DI)", () => {
   let owom: IOwom;
@@ -20,7 +22,7 @@ describe("edge-case map (without DI)", () => {
 
   it("should throw error when one of objects is null", () => {
     const invoke = () => {
-      owom.map([null]).to(Mapper);
+      owom.map<any, any>([null]).to(Mapper);
     };
 
     expect(invoke).toThrow(TypeError);
@@ -29,7 +31,7 @@ describe("edge-case map (without DI)", () => {
   it("should throw error when createdAt is empty", () => {
     const invoke = () => {
       owom.map({}).to(Mapper);
-      owom.map([{}, {}]).to(Mapper);
+      owom.map<any, any>([{}, {}]).to(Mapper);
     };
 
     expect(invoke).toThrow(TypeError);
@@ -38,7 +40,7 @@ describe("edge-case map (without DI)", () => {
   it("should NOT throw error when createdAt is empty", () => {
     const invoke = () => {
       owom.map({}).to(SafeMapper);
-      owom.map([{}, {}]).to(SafeMapper);
+      owom.map<any, any>([{}, {}]).to(SafeMapper);
     };
 
     expect(invoke).not.toThrow(TypeError);
@@ -48,7 +50,7 @@ describe("edge-case map (without DI)", () => {
     const createdAt = new Date();
 
     const result = owom
-      .map({ name: "abc", status: true, createdAt })
+      .map<Source, ITarget>({ name: "abc", status: true, createdAt })
       .to(Mapper);
 
     expect(result).toMatchObject({
@@ -59,7 +61,9 @@ describe("edge-case map (without DI)", () => {
   });
 
   it("should return expected collection", () => {
-    const result = owom.map([{ name: "1" }, {}, { name: "2" }]).to(SafeMapper);
+    const result = owom
+      .map<Source, ITarget>([{ name: "1" } as any, {}, { name: "2" }])
+      .to(SafeMapper);
 
     expect(result).toEqual([{ name: "1" }, {}, { name: "2" }]);
   });

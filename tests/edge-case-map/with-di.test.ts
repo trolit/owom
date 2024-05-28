@@ -28,7 +28,7 @@ describe("edge-case map (with DI)", () => {
 
   it("should throw error when object is null", () => {
     const invoke = () => {
-      owom.map<Source, ITarget>(null).to(Di.Mapper);
+      owom.map(null).to(Di.Mapper);
     };
 
     expect(invoke).toThrow(TypeError);
@@ -36,7 +36,7 @@ describe("edge-case map (with DI)", () => {
 
   it("should throw error when one of objects is null", () => {
     const invoke = () => {
-      owom.map<Source, ITarget>([null]).to(Di.Mapper);
+      owom.map([null]).to(Di.Mapper);
     };
 
     expect(invoke).toThrow(TypeError);
@@ -44,8 +44,8 @@ describe("edge-case map (with DI)", () => {
 
   it("should throw error when createdAt is empty", () => {
     const invoke = () => {
-      owom.map<Source, ITarget>({} as any).to(Di.Mapper);
-      owom.map<Source, ITarget>([{} as any]).to(Di.Mapper);
+      owom.map({}).to(Di.Mapper);
+      owom.map([{}, {}]).to(Di.Mapper);
     };
 
     expect(invoke).toThrow(TypeError);
@@ -53,8 +53,8 @@ describe("edge-case map (with DI)", () => {
 
   it("should NOT throw error when createdAt is empty", () => {
     const invoke = () => {
-      owom.map<Source, ITarget>({} as any).to(Di.SafeMapper);
-      owom.map<Source, ITarget>([{} as any]).to(Di.SafeMapper);
+      owom.map({}).to(Di.SafeMapper);
+      owom.map([{}, {}]).to(Di.SafeMapper);
     };
 
     expect(invoke).not.toThrow(TypeError);

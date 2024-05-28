@@ -1,7 +1,9 @@
 import { IOwom, useOwom } from "@owom";
 
 import { PostMapperWithoutDi } from "./mappers/PostMapper";
+import { IPostDto } from "./dtos/IPostDto";
 import { POST_1, POST_2 } from "./data";
+import { Post } from "./models/Post";
 
 describe("nested map (without DI)", () => {
   let owom: IOwom;
@@ -11,14 +13,16 @@ describe("nested map (without DI)", () => {
   });
 
   it("should return valid mapped object", () => {
-    const result = owom.map(POST_1.beforeMap).to(PostMapperWithoutDi);
+    const result = owom
+      .map<Post, IPostDto>(POST_1.beforeMap)
+      .to(PostMapperWithoutDi);
 
     expect(result).toMatchObject(POST_1.afterMap);
   });
 
   it("should return valid collection of mapped objects", () => {
     const result = owom
-      .map([POST_1.beforeMap, POST_2.beforeMap])
+      .map<Post, IPostDto>([POST_1.beforeMap, POST_2.beforeMap])
       .to(PostMapperWithoutDi);
 
     expect(result).toHaveLength(2);
