@@ -29,7 +29,6 @@ export class OwomMapper<T> {
     this[INHERITED_KEYS_KEY].map((key: keyof T) => {
       const value = this[DATA_KEY][key];
 
-      // @TODO add option to assign even if undefined
       if (typeof value !== "undefined") {
         (this as any)[key] = value;
       }
