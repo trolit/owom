@@ -21,6 +21,8 @@ class Mapper extends OwomMapper<Model> implements IDto {
   }
 }
 
+// -----------------------------------
+
 describe("map with di", () => {
   let owom: IOwom;
 

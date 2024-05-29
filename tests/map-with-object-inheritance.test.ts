@@ -16,7 +16,7 @@ interface ICommentDto {
   author: User;
 }
 
-export class FlatMapper extends OwomMapper<Comment> implements ICommentDto {
+class Mapper extends OwomMapper<Comment> implements ICommentDto {
   text: string;
   author: User;
 
@@ -38,7 +38,7 @@ describe("map with object inheritance", () => {
 
   it("should NOT throw error when author is empty", () => {
     const invoke = () => {
-      owom.map<Comment, ICommentDto>(<any>{}).to(FlatMapper);
+      owom.map<Comment, ICommentDto>(<any>{}).to(Mapper);
     };
 
     expect(invoke).not.toThrow(TypeError);
@@ -54,7 +54,7 @@ describe("map with object inheritance", () => {
     const source: Comment = { value, author: user };
     const target: ICommentDto = { text: value, author: user };
 
-    const result = owom.map<Comment, ICommentDto>(source).to(FlatMapper);
+    const result = owom.map<Comment, ICommentDto>(source).to(Mapper);
 
     expect(result).toMatchObject(target);
   });
