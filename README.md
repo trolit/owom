@@ -62,7 +62,7 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
 }
 ```
 
-Extending `OwomMapper` makes inherited keys mapping logic reusable and protects properties/keys names that are supposed to be inhertied. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opening possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
+Extending `OwomMapper` makes inherited keys mapping logic reusable and protects properties/keys names that are supposed to be inherited. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opening possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
 
 ```ts
 constructor(data: Product) {
