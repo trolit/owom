@@ -1,17 +1,11 @@
-import { ITarget } from "./ITarget";
-import { Source } from "./Source";
-import { IOwom } from "@owom";
+import { IOwom, OwomMapper, useOwom } from "@owom";
 
-export const includeTests = ({
-  owomResolver,
-  Mapper,
-  SafeMapper,
-}: {
-  owomResolver: () => IOwom;
-  Mapper: any;
-  SafeMapper: any;
-}) => {
-  const owom = owomResolver();
+describe("map", () => {
+  let owom: IOwom;
+
+  beforeAll(() => {
+    owom = useOwom();
+  });
 
   it("should throw error when object is null", () => {
     const invoke = () => {
@@ -51,7 +45,7 @@ export const includeTests = ({
     const createdAt = new Date();
 
     const result = owom
-      .map<Source, ITarget>({ name: "abc", status: true, createdAt })
+      .map<Model, ITarget>({ name: "abc", status: true, createdAt })
       .to(Mapper);
 
     expect(result).toMatchObject({
@@ -63,9 +57,58 @@ export const includeTests = ({
 
   it("should return expected collection", () => {
     const result = owom
-      .map<Source, ITarget>([{ name: "1" } as any, {}, { name: "2" }])
+      .map<Model, ITarget>([{ name: "1" } as any, {}, { name: "2" }])
       .to(SafeMapper);
 
     expect(result).toEqual([{ name: "1" }, {}, { name: "2" }]);
   });
-};
+});
+
+// -----------------------------------
+
+class Model {
+  name: string;
+  status?: boolean;
+  createdAt: Date;
+}
+
+interface ITarget {
+  name: string;
+  status: boolean;
+  publishedAt: string;
+}
+
+class Mapper extends OwomMapper<Model> implements ITarget {
+  name: string;
+  status: boolean;
+  publishedAt: string;
+
+  constructor(data: Model) {
+    super(data, ["name"]);
+
+    const { status, createdAt } = data;
+
+    this.status = status;
+
+    this.publishedAt = createdAt.toISOString();
+  }
+}
+
+class SafeMapper extends OwomMapper<Model> implements ITarget {
+  name: string;
+  status: boolean;
+  publishedAt: string;
+
+  constructor(data: Model) {
+    super(data, ["name"]);
+
+    const { status, createdAt } = data;
+
+    this.status = status;
+
+    // in real scenario though, we wouldn't add such check as createdAt is neither optional nor nullable
+    if (createdAt) {
+      this.publishedAt = createdAt.toISOString();
+    }
+  }
+}

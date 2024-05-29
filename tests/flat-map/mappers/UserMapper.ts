@@ -1,12 +1,8 @@
-import { injectable } from "inversify";
-import "reflect-metadata";
-
 import { OwomMapper } from "@owom";
 
 import { IUserDto } from "../dtos/IUserDto";
 import { User } from "../models/User";
 
-@injectable()
 export class UserMapper extends OwomMapper<User> implements IUserDto {
   fullName: string;
   isActive: boolean;

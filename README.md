@@ -62,7 +62,7 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
 }
 ```
 
-Extending `OwomMapper` makes inherited keys mapping logic reusable and protects properties/keys names that are supposed to be inhertied. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opening possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
+`OwomMapper<T>` "protects" properties/keys names that are supposed to be inherited and performs reassignment from source data. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opening possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
 
 ```ts
 constructor(data: Product) {
@@ -103,6 +103,6 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
 ```
 
 > [!NOTE]
-> It's worth noting that recall solution is future-proof property initialisation, nevertheless of flag state!
+> It's worth noticing that recall solution is future-proof property initialisation, nevertheless of flag state.
 
 To find out more regarding `useDefineForClassFields`, view https://angular.schule/blog/2022-11-use-define-for-class-fields
