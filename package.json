@@ -1,7 +1,7 @@
 {
   "name": "owom",
-  "version": "0.0.1",
-  "description": "Example of one-way object mapper made with JS/TS",
+  "version": "0.0.3",
+  "description": "Example of one-way object mapper made for JS/TS project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
