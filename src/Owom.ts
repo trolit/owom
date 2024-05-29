@@ -1,3 +1,4 @@
+import { IConstructorOptions } from "types/IConstructorOptions";
 import { DiResolver, Options } from "types/Options";
 import { MapManyFunc, MapOneFunc } from "types/Map";
 import { Constructor } from "types/Constructor";
@@ -24,12 +25,12 @@ export class Owom implements IOwom {
     entity: T | T[],
   ): { to: MapOneFunc<T, Z> } | { to: MapManyFunc<T, Z> } {
     return {
-      to: Mapper => {
+      to: (Mapper, options) => {
         if (typeof Mapper === "string") {
-          return this._resolveWithDi<T>(entity, Mapper);
+          return this._resolveWithDi<T>(entity, Mapper, options);
         }
 
-        return this._resolveWithConcreteType<T, Z>(entity, Mapper);
+        return this._resolveWithConcreteType<T, Z>(entity, Mapper, options);
       },
     };
   }
@@ -37,22 +38,33 @@ export class Owom implements IOwom {
   private _resolveWithConcreteType<T, Z>(
     entity: T | T[],
     Mapper: Constructor<T, Z>,
+    options?: IConstructorOptions,
   ) {
     return Array.isArray(entity)
-      ? entity.map(entity => this._executeMap(entity, Mapper))
-      : this._executeMap(entity, Mapper);
+      ? entity.map(entity => this._executeMap(entity, Mapper, options))
+      : this._executeMap(entity, Mapper, options);
   }
 
-  private _resolveWithDi<T>(entity: T | T[], token: string) {
+  private _resolveWithDi<T>(
+    entity: T | T[],
+    token: string,
+    options?: IConstructorOptions,
+  ) {
     const Mapper = this._diResolver(token);
 
     return Array.isArray(entity)
-      ? entity.map(entity => this._executeMap(entity, Mapper))
-      : this._executeMap(entity, Mapper);
+      ? entity.map(entity => this._executeMap(entity, Mapper, options))
+      : this._executeMap(entity, Mapper, options);
   }
 
-  private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
-    const mapper = new Mapper(entity, this);
+  private _executeMap<T, Z>(
+    entity: T,
+    Mapper: Constructor<T, Z>,
+    options?: IConstructorOptions,
+  ) {
+    const defaultOptions: IConstructorOptions = { additionalData: {} };
+
+    const mapper = new Mapper(entity, this, options ?? defaultOptions);
 
     // @NOTE here you can cover extra options, referring to Mapper instance
 
