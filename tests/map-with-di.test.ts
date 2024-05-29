@@ -25,13 +25,30 @@ describe("map with di", () => {
     expect(invoke).toThrow(TypeError);
   });
 
-  it("should resolve mapper and return expected result", () => {
+  it("should resolve mapper and return expected object", () => {
     const result = owom
       .map<Model, IDto>({ id: "1", value: "some text" })
       .to(Mapper.name);
 
     expect(result).toMatchObject({
       text: "some text",
+    });
+  });
+
+  it("should resolve mapper and return expected collection", () => {
+    const result = owom
+      .map<Model, IDto>([
+        { id: "1", value: "text1" },
+        { id: "2", value: "text2" },
+      ])
+      .to(Mapper.name);
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toMatchObject({
+      text: "text1",
+    });
+    expect(result[1]).toMatchObject({
+      text: "text2",
     });
   });
 });
