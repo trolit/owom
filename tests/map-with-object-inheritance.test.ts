@@ -1,34 +1,6 @@
 import { IOwom, OwomMapper, useOwom } from "@owom";
 import { faker } from "@faker-js/faker";
 
-class User {
-  name: string;
-  age: number;
-}
-
-class Comment {
-  value: string;
-  author: User;
-}
-
-interface ICommentDto {
-  text: string;
-  author: User;
-}
-
-class Mapper extends OwomMapper<Comment> implements ICommentDto {
-  text: string;
-  author: User;
-
-  constructor(data: Comment) {
-    super(data, ["author"]);
-
-    this.text = data.value;
-  }
-}
-
-// -----------------------------------
-
 describe("map with object inheritance", () => {
   let owom: IOwom;
 
@@ -59,3 +31,31 @@ describe("map with object inheritance", () => {
     expect(result).toMatchObject(target);
   });
 });
+
+// -----------------------------------
+
+class User {
+  name: string;
+  age: number;
+}
+
+class Comment {
+  value: string;
+  author: User;
+}
+
+interface ICommentDto {
+  text: string;
+  author: User;
+}
+
+class Mapper extends OwomMapper<Comment> implements ICommentDto {
+  text: string;
+  author: User;
+
+  constructor(data: Comment) {
+    super(data, ["author"]);
+
+    this.text = data.value;
+  }
+}

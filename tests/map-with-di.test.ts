@@ -2,27 +2,6 @@ import { IOwom, OwomMapper, useOwom } from "@owom";
 
 import { Container } from "inversify";
 
-class Model {
-  id: string;
-  value: string;
-}
-
-interface IDto {
-  text: string;
-}
-
-class Mapper extends OwomMapper<Model> implements IDto {
-  text: string;
-
-  constructor(data: Model) {
-    super(data, []);
-
-    this.text = data.value;
-  }
-}
-
-// -----------------------------------
-
 describe("map with di", () => {
   let owom: IOwom;
 
@@ -56,3 +35,24 @@ describe("map with di", () => {
     });
   });
 });
+
+// -----------------------------------
+
+class Model {
+  id: string;
+  value: string;
+}
+
+interface IDto {
+  text: string;
+}
+
+class Mapper extends OwomMapper<Model> implements IDto {
+  text: string;
+
+  constructor(data: Model) {
+    super(data, []);
+
+    this.text = data.value;
+  }
+}
