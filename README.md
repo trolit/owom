@@ -161,4 +161,6 @@ private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
 
 To find out more regarding `useDefineForClassFields` flag refer to https://angular.schule/blog/2022-11-use-define-for-class-fields
 
-Need to create mapper came from making bigger scale project [itvault](https://github.com/trolit/itvault/) and positive experience while using such library in C# projects. I didn't want to rely on decorators while configuring conversions and at the same time wanted to keep strong-typing and reuse types for frontend. If you find it useful too, feel free to reuse it 👍
+---
+
+Need to create mapper came from making bigger scale project ([itvault](https://github.com/trolit/itvault/)) and positive experience while using such library in C# projects. I didn't want to rely on decorators while configuring conversions and at the same time wanted to 1) keep TypeScript strong-typing and 2) reuse types for frontend. If you find it useful, feel free to reuse it 👍
