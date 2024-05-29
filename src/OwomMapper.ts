@@ -11,6 +11,7 @@ export class OwomMapper<T> {
 
   get _() {
     return {
+      useInheritedKeys: this.useInheritedKeys.bind(this), // @NOTE only for testing purposes
       removeTemporaryData: this._removeTemporaryProperties.bind(this),
     };
   }

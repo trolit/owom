@@ -1,5 +1,6 @@
 import { IOwom, OwomMapper } from "@owom";
 
+import { onNativeJsPropInitialisation } from "../../helpers/onNativeJsPropInitialisation";
 import { ICommentDto } from "../dtos/ICommentDto";
 import { CommentMapper } from "./CommentMapper";
 import { Comment } from "../models/Comment";
@@ -15,6 +16,7 @@ export class PostMapper extends OwomMapper<Post> implements IPostDto {
 
   constructor(data: Post, owom: IOwom) {
     super(data, ["value", "title"]);
+    onNativeJsPropInitialisation(this);
 
     const { user, createdAt, comments } = data;
 
