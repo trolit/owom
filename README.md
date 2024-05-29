@@ -138,7 +138,7 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
     // then that line would not be needed
     // this.useInheritedKeys();
 
-    // but inherited keys ('id', 'name')
+    // but keys to inherit ('id', 'name')
     // would not be available as "_mapInheritedKeys" is called after object instantiation
     console.log(this.name); // undefined
   }
