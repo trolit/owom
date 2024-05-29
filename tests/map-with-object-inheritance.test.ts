@@ -1,3 +1,4 @@
+import { onNativeJsPropInitialisation } from "./helpers/onNativeJsPropInitialisation";
 import { IOwom, OwomMapper, useOwom } from "@owom";
 import { faker } from "@faker-js/faker";
 
@@ -55,6 +56,7 @@ class Mapper extends OwomMapper<Comment> implements ICommentDto {
 
   constructor(data: Comment) {
     super(data, ["author"]);
+    onNativeJsPropInitialisation(this);
 
     this.text = data.value;
   }

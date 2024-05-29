@@ -1,4 +1,4 @@
-Refactored & expanded implementation of one way entity mapper service 📦 ➡️ 📦 taken from [itvault](https://github.com/trolit/itvault/). It uses constructors to store mapping config and contracts (interface) to offer reusability in monorepos while utilizing strong-typing in every place (when combined with TypeScript).
+Slightly expanded implementation of one way entity mapper service 📦 ➡️ 📦 taken from [itvault](https://github.com/trolit/itvault/). It uses constructors to store mapping config and contracts (interface) to offer reusability in monorepos while utilizing strong-typing in every place (when combined with TypeScript).
 
 ### Usage
 
@@ -57,12 +57,12 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
   manufacturer: { id: string; name: string };
 
   constructor(data: Product) {
-    super(data, ["id", "name"]); // pass keys/props that should be inherited (type-safety validated)
+    super(data, ["id", "name"]); // pass keys/props that should be inherited (validated against any typos)
   }
 }
 ```
 
-`OwomMapper<T>` "protects" properties/keys names that are supposed to be inherited and performs reassignment from source data. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opening possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
+`OwomMapper<T>` "protects" properties/keys names that are supposed to be inherited and performs reassignment from source data. Implementation of `IProductDto` forces to maintain appropriate shape of the mapper while at the same time opens possibility to expose that type to other sections of monorepo project. Other parts like `manufacturer` can be manually assigned:
 
 ```ts
 constructor(data: Product) {
@@ -96,13 +96,53 @@ export class ProductMapper extends OwomMapper<Product> implements IProductDto {
 
   constructor(data: Product) {
     super(data, ["id", "name"]);
-
     this.useInheritedKeys(); // <--------------
   }
 }
 ```
 
 > [!NOTE]
-> It's worth noticing that recall solution is future-proof property initialisation, nevertheless of flag state.
+> It's worth noticing that above solution is future-proof property initialisation, nevertheless of `useDefineForClassFields` flag state.
 
-To find out more regarding `useDefineForClassFields`, view https://angular.schule/blog/2022-11-use-define-for-class-fields
+Alternatively, you could modify [`private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>)`](./src/Owom.ts) and call map of inherited keys/properties there but in such case you would have to either accept that inherited properties are not available when configuring custom mapping:
+
+```ts
+private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
+  const mapper = new Mapper(entity, this);
+  mapper._._mapInheritedKeys(); // <-------------
+
+  return <Z>mapper;
+}
+
+export class ProductMapper extends OwomMapper<Product> implements IProductDto {
+  id: string;
+  name: string;
+
+  constructor(data: Product) {
+    super(data, ["id", "name"]);
+
+    // not needed
+    // this.useInheritedKeys();
+
+    // but inherited keys ('id', 'name')
+    // would not be available as "_mapInheritedKeys" is called after object instantiation
+    console.log(this.name); // undefined
+  }
+}
+```
+
+or you would have to rework it by forcing users to implement function (e.g. `handleCustomMap`) and place custom mapping there:
+
+```ts
+private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
+  const mapper = new Mapper(entity, this);
+
+  mapper._._mapInheritedKeys();
+  mapper._._handleCustomMap(); // inherited keys are available
+  mapper._._clean();
+
+  return <Z>mapper;
+}
+```
+
+To find out more regarding `useDefineForClassFields`, check https://angular.schule/blog/2022-11-use-define-for-class-fields

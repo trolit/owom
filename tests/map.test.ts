@@ -1,3 +1,4 @@
+import { onNativeJsPropInitialisation } from "./helpers/onNativeJsPropInitialisation";
 import { IOwom, OwomMapper, useOwom } from "@owom";
 
 describe("map", () => {
@@ -85,6 +86,7 @@ class Mapper extends OwomMapper<Model> implements ITarget {
 
   constructor(data: Model) {
     super(data, ["name"]);
+    this.useInheritedKeys();
 
     const { status, createdAt } = data;
 
@@ -101,6 +103,7 @@ class SafeMapper extends OwomMapper<Model> implements ITarget {
 
   constructor(data: Model) {
     super(data, ["name"]);
+    onNativeJsPropInitialisation(this);
 
     const { status, createdAt } = data;
 

@@ -9,11 +9,16 @@ export class OwomMapper<T> {
     this.useInheritedKeys();
   }
 
+  get _() {
+    return {
+      useInheritedKeys: this.useInheritedKeys.bind(this), // @NOTE only for testing purposes
+      removeTemporaryData: this._removeTemporaryProperties.bind(this),
+    };
+  }
+
   // @NOTE needs to be called manually in mapper when useDefineForClassFields is true
   protected useInheritedKeys() {
     this._map();
-
-    this._removeTemporaryProperties();
   }
 
   private _removeTemporaryProperties() {

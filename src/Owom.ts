@@ -39,22 +39,24 @@ export class Owom implements IOwom {
     Mapper: Constructor<T, Z>,
   ) {
     return Array.isArray(entity)
-      ? entity.map(entity => this._performMap(entity, Mapper))
-      : this._performMap(entity, Mapper);
+      ? entity.map(entity => this._executeMap(entity, Mapper))
+      : this._executeMap(entity, Mapper);
   }
 
   private _resolveWithDi<T>(entity: T | T[], token: string) {
     const Mapper = this._diResolver(token);
 
     return Array.isArray(entity)
-      ? entity.map(entity => this._performMap(entity, Mapper))
-      : this._performMap(entity, Mapper);
+      ? entity.map(entity => this._executeMap(entity, Mapper))
+      : this._executeMap(entity, Mapper);
   }
 
-  private _performMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
+  private _executeMap<T, Z>(entity: T, Mapper: Constructor<T, Z>) {
     const mapper = new Mapper(entity, this);
 
     // @NOTE here you can cover extra options, referring to Mapper instance
+
+    mapper._.removeTemporaryData();
 
     // @NOTE free to cast as outcome of Mapper instantiation is supposed to match "Z"
     return <Z>mapper;
