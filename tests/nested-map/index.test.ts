@@ -1,37 +1,30 @@
-import { useOwom } from "@owom";
+import { IOwom, useOwom } from "@owom";
 
-import { PostMapperWithDi, PostMapperWithoutDi } from "./mappers/PostMapper";
-import { CommentMapper } from "./mappers/CommentMapper";
-import { includeTests } from "./includeTests";
-import { Container } from "inversify";
+import { PostMapper } from "./mappers/PostMapper";
+import { IPostDto } from "./dtos/IPostDto";
+import { POST_1, POST_2 } from "./data";
+import { Post } from "./models/Post";
 
 describe("nested map", () => {
-  enum Di {
-    PostMapper = "PostMapper",
-    CommentMapper = "CommentMapper",
-  }
+  let owom: IOwom;
 
-  describe("with DI", function () {
-    includeTests({
-      owomResolver: () => {
-        const container = new Container();
-        container.bind(Di.PostMapper).toConstructor(PostMapperWithDi);
-        container.bind(Di.CommentMapper).toConstructor(CommentMapper);
-
-        return useOwom({
-          di: token => container.get(token),
-        });
-      },
-
-      Mapper: Di.PostMapper,
-    });
+  beforeAll(() => {
+    owom = useOwom();
   });
 
-  describe("without DI", function () {
-    includeTests({
-      owomResolver: useOwom,
+  it("should return valid mapped object", () => {
+    const result = owom.map<Post, IPostDto>(POST_1.beforeMap).to(PostMapper);
 
-      Mapper: PostMapperWithoutDi,
-    });
+    expect(result).toMatchObject(POST_1.afterMap);
+  });
+
+  it("should return valid collection of mapped objects", () => {
+    const result = owom
+      .map<Post, IPostDto>([POST_1.beforeMap, POST_2.beforeMap])
+      .to(PostMapper);
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toMatchObject(POST_1.afterMap);
+    expect(result[1]).toMatchObject(POST_2.afterMap);
   });
 });
